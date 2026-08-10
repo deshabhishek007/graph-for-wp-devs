@@ -1,0 +1,50 @@
+name: Build WordPress graph pack
+
+on:
+  workflow_dispatch:
+    inputs:
+      wordpress_version:
+        description: "Stable WordPress version or latest"
+        required: true
+        default: latest
+        type: string
+      graphify_version:
+        description: "Pinned graphifyy package version"
+        required: true
+        default: "0.9.37"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v9
+      - name: Install Graphify
+        env:
+          GRAPHIFY_VERSION: ${{ inputs.graphify_version }}
+        run: uv tool install "graphifyy==$GRAPHIFY_VERSION"
+      - name: Build and verify pack
+        env:
+          REQUESTED_VERSION: ${{ inputs.wordpress_version }}
+        run: ./scripts/build-pack.sh "$REQUESTED_VERSION"
+      - name: Resolve artifact version
+        id: version
+        env:
+          REQUESTED_VERSION: ${{ inputs.wordpress_version }}
+        run: |
+          version="$(./scripts/resolve-version.sh "$REQUESTED_VERSION")"
+          echo "value=$version" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: wordpress-${{ steps.version.outputs.value }}-graph-pack
+          path: packs/wordpress/${{ steps.version.outputs.value }}/
+          if-no-files-found: error
+          compression-level: 9

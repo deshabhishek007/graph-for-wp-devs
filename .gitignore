@@ -1,0 +1,15 @@
+.DS_Store
+.env
+.venv/
+__pycache__/
+*.py[cod]
+
+# Downloaded archives, pristine WordPress source, and temporary graph builds.
+build/*
+!build/.gitkeep
+
+# Graphify's default local output. Published graphs live under packs/.
+graphify-out/
+.graphify_analysis.json
+.graphify_labels.json
+packs/wordpress/*/cache/

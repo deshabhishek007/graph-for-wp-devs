@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Graph for WP Devs pack manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "pack_type",
+    "wordpress_version",
+    "graphify",
+    "generated_at",
+    "source",
+    "files",
+    "statistics",
+    "reproducibility"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "pack_type": { "const": "wordpress-core" },
+    "wordpress_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$"
+    },
+    "graphify": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "package", "license", "build_mode"],
+      "properties": {
+        "version": { "type": "string", "minLength": 1 },
+        "package": { "const": "graphifyy" },
+        "license": { "const": "Apache-2.0" },
+        "build_mode": { "enum": ["code-only"] }
+      }
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project", "provider", "archive", "archive_sha256", "checksum_api", "verified_files", "license"],
+      "properties": {
+        "project": { "const": "WordPress" },
+        "provider": { "const": "wordpress.org" },
+        "archive": { "type": "string", "format": "uri", "pattern": "^https://wordpress\\.org/" },
+        "archive_sha256": { "$ref": "#/$defs/sha256" },
+        "archive_content_md5": { "type": ["string", "null"], "pattern": "^[0-9a-f]{32}$" },
+        "checksum_api": { "type": "string", "format": "uri", "pattern": "^https://api\\.wordpress\\.org/" },
+        "verified_files": { "type": "integer", "minimum": 1 },
+        "license": { "const": "GPL-2.0-or-later" }
+      }
+    },
+    "files": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["graph", "report", "test_results"],
+      "properties": {
+        "graph": { "$ref": "#/$defs/file" },
+        "report": { "$ref": "#/$defs/file" },
+        "test_results": { "$ref": "#/$defs/file" }
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodes", "edges", "payload_bytes"],
+      "properties": {
+        "nodes": { "type": "integer", "minimum": 1 },
+        "edges": { "type": "integer", "minimum": 1 },
+        "payload_bytes": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "reproducibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["core_graph_expected_deterministic", "generated_at_source", "known_nondeterminism"],
+      "properties": {
+        "core_graph_expected_deterministic": { "type": "boolean" },
+        "generated_at_source": { "enum": ["SOURCE_DATE_EPOCH", "build-clock"] },
+        "known_nondeterminism": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+$" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}

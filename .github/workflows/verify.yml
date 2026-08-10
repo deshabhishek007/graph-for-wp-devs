@@ -1,0 +1,39 @@
+name: Verify graph packs
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v9
+      - name: Install Graphify
+        run: uv tool install graphifyy==0.9.37
+      - name: Check shell syntax
+        run: |
+          for script in scripts/*.sh scripts/lib/*.sh; do
+            bash -n "$script"
+          done
+      - name: Verify all packs
+        run: |
+          found=0
+          while IFS= read -r pack; do
+            found=1
+            ./scripts/verify-pack.sh "$pack"
+            graphify explain "wp_insert_post" \
+              --graph "$pack/graph.json" >/dev/null
+          done < <(
+            find packs/wordpress -mindepth 1 -maxdepth 1 -type d -print |
+              sort
+          )
+          test "$found" -eq 1

@@ -1,0 +1,9 @@
+.git/
+packs/
+graphify-out/
+.codex/
+.claude/
+.github/
+examples/
+schema/
+scripts/
