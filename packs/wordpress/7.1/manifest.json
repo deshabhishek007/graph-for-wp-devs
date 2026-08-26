@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "pack_type": "wordpress-core",
+  "wordpress_version": "7.1",
+  "graphify": {
+    "version": "0.9.37",
+    "package": "graphifyy",
+    "license": "Apache-2.0",
+    "build_mode": "code-only"
+  },
+  "generated_at": "2026-08-26T15:28:01Z",
+  "source": {
+    "project": "WordPress",
+    "provider": "wordpress.org",
+    "archive": "https://wordpress.org/wordpress-7.1.tar.gz",
+    "archive_sha256": "05a5f89138f632b7329f1202f2a0553c5f7fe4daf8e4b9ca7ebae9b9466b9e86",
+    "archive_content_md5": null,
+    "checksum_api": "https://api.wordpress.org/core/checksums/1.0/?version=7.1&locale=en_US",
+    "verified_files": 3782,
+    "license": "GPL-2.0-or-later"
+  },
+  "files": {
+    "graph": {
+      "path": "graph.json",
+      "sha256": "a13f3a0dd0b5ff41a8fabaccb9429e9b5e9ce0ae282ab37232df0bdff562864d"
+    },
+    "report": {
+      "path": "GRAPH_REPORT.md",
+      "sha256": "d5c3a0b7dc935796a8aa32b072d16bef933ec233ce1f548cf8992d376dfc97da"
+    },
+    "test_results": {
+      "path": "TEST_RESULTS.md",
+      "sha256": "4df8a5c1d069632f9324c7aaafbded89313bc0abb856f18120d1ddd044bc0cfa"
+    }
+  },
+  "statistics": {
+    "nodes": 24201,
+    "edges": 52939,
+    "payload_bytes": 31251726
+  },
+  "reproducibility": {
+    "core_graph_expected_deterministic": false,
+    "generated_at_source": "build-clock",
+    "known_nondeterminism": [
+      "Graphify community detection and community ID assignment"
+    ]
+  }
+}
