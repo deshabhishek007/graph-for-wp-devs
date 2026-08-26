@@ -1,6 +1,7 @@
 name: Verify graph packs
 
 on:
+  workflow_dispatch:
   pull_request:
   push:
     branches: [main]
@@ -16,7 +17,7 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - uses: astral-sh/setup-uv@v9
+      - uses: astral-sh/setup-uv@v10.0.1
       - name: Install Graphify
         run: uv tool install graphifyy==0.9.37
       - name: Check shell syntax
